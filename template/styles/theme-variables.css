@@ -1,0 +1,123 @@
+/**
+ * THEME VARIABLES - CUSTOMIZE FOR YOUR COURSE
+ *
+ * This file contains all customizable colors, fonts, and spacing.
+ * Change these values to match your institution's brand or course aesthetic.
+ *
+ * The presentation.css file references these variables, so you should not
+ * need to edit presentation.css directly.
+ */
+
+:root {
+    /* ===================================
+       PRIMARY BRAND COLORS
+       Change these to match your institution
+       =================================== */
+    --primary-color: #00669b;        /* Main brand color */
+    --primary-dark: #043d5d;         /* Darker shade of primary */
+    --secondary-color: #009edb;      /* Secondary/accent color */
+    --secondary-light: #9ddcf9;      /* Light secondary */
+    --accent-color: #ffc222;         /* Accent/highlight color */
+
+    /* ===================================
+       ADDITIONAL BRAND COLORS (Optional)
+       =================================== */
+    --success-color: #70bf54;        /* Green for success states */
+    --success-light: #afd46c;        /* Light green */
+    --warning-color: #ffc222;        /* Yellow/gold for warnings */
+    --danger-color: #ff5555;         /* Red for errors/warnings */
+
+    /* ===================================
+       SPACING SYSTEM
+       Consistent spacing throughout
+       =================================== */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 40px;
+    --spacing-xl: 60px;
+
+    /* ===================================
+       TYPOGRAPHY
+       =================================== */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-xs: 0.9em;
+    --font-size-sm: 1em;
+    --font-size-md: 1.2em;
+    --font-size-lg: 1.5em;
+    --font-size-xl: 2em;
+    --font-size-xxl: 2.8em;
+
+    /* Code block typography */
+    --code-font-family: 'Courier New', 'Consolas', monospace;
+    --code-font-size: 1.1em;
+    --code-line-height: 1.6;
+    --code-padding: 12px;
+
+    /* ===================================
+       LIGHT MODE THEME (DEFAULT)
+       =================================== */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-accent: #e8f4f9;
+    --text-primary: #000000;
+    --text-secondary: #043d5d;
+    --text-muted: #666666;
+    --border-color: #009edb;
+    --shadow-color: rgba(0, 102, 155, 0.15);
+    --code-bg: #043d5d;
+    --code-text: #ffffff;
+    --success-bg: #e8f7e3;
+    --success-border: #70bf54;
+    --warning-bg: #fff8e5;
+    --warning-border: #ffc222;
+    --gradient-start: #00669b;
+    --gradient-end: #009edb;
+    --slide-bg: #ffffff;
+    --slide-bg-rgb: 255, 255, 255; /* RGB values for transparency effects */
+    --nav-bg: #00669b;
+    --nav-text: #ffffff;
+    --button-hover: #043d5d;
+    --link-color: #00669b;
+    --link-hover: #009edb;
+    --card-bg: white;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================
+   DARK MODE THEME
+   =================================== */
+[data-theme="dark"] {
+    --bg-primary: #000000;
+    --bg-secondary: #1a1a1a;
+    --bg-accent: #043d5d;
+    --text-primary: #ffffff;
+    --text-secondary: #9ddcf9;
+    --text-muted: #aaaaaa;
+    --border-color: #009edb;
+    --shadow-color: rgba(0, 158, 219, 0.3);
+    --code-bg: #1a1a1a;
+    --code-text: #9ddcf9;
+    --success-bg: rgba(112, 191, 84, 0.1);
+    --success-border: #afd46c;
+    --warning-bg: rgba(255, 194, 34, 0.1);
+    --warning-border: #ffc222;
+    --gradient-start: #043d5d;
+    --gradient-end: #00669b;
+    --slide-bg: #1a1a1a;
+    --slide-bg-rgb: 26, 26, 26; /* RGB values for transparency effects */
+    --nav-bg: #043d5d;
+    --nav-text: #ffffff;
+    --button-hover: #009edb;
+    --link-color: #009edb;
+    --link-hover: #ffc222;
+    --card-bg: #2a2a2a;
+    --shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* ===================================
+   SMOOTH TRANSITIONS
+   =================================== */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

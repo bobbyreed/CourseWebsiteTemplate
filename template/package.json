@@ -1,0 +1,22 @@
+{
+  "name": "course-website-template",
+  "version": "1.0.0",
+  "description": "Domain-agnostic course website template with presentation system and optional attendance tracking",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "education",
+    "course-website",
+    "presentation",
+    "attendance",
+    "netlify",
+    "serverless"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.3"
+  }
+}
