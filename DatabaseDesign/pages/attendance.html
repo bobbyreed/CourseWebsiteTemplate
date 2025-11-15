@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Attendance - CSCI 5603</title>
+    <link rel="stylesheet" href="../styles/database-theme.css">
+    <link rel="stylesheet" href="../styles/attendance.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <script src="../js/classroom-auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✓ Attendance</h1>
+            <p>CSCI 5603 - Database Design</p>
+        </header>
+
+        <div class="date-selector">
+            <div>
+                <label for="attendanceDate" style="margin-right: 10px; font-weight: 500;">Date:</label>
+                <input type="date" id="attendanceDate">
+            </div>
+            <div>
+                <button class="btn btn-primary" onclick="viewHistory()">📊 View History</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Swipe Student Card</h2>
+
+            <div class="swipe-area active" id="swipeArea">
+                <h3>✓ Ready to Scan</h3>
+                <p>Swipe student cards to mark attendance</p>
+                <p style="font-size: 0.9em; color: var(--text-muted); margin-top: 10px;">
+                    Click here first, then swipe cards
+                </p>
+            </div>
+
+            <input type="text" id="cardInput" autocomplete="off">
+
+            <div id="statusMessage" class="status-message"></div>
+
+            <div class="stats">
+                <div class="stat-box present">
+                    <div class="stat-label">Present</div>
+                    <div class="stat-number" id="presentCount">0</div>
+                </div>
+                <div class="stat-box absent">
+                    <div class="stat-label">Absent</div>
+                    <div class="stat-number" id="absentCount">0</div>
+                </div>
+                <div class="stat-box total">
+                    <div class="stat-label">Total Enrolled</div>
+                    <div class="stat-number" id="totalCount">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">
+                <h2>Today's Attendance</h2>
+                <div class="toggle-view">
+                    <button class="toggle-btn active" onclick="toggleView('all')" id="viewAll">All Students</button>
+                    <button class="toggle-btn" onclick="toggleView('present')" id="viewPresent">Present Only</button>
+                    <button class="toggle-btn" onclick="toggleView('absent')" id="viewAbsent">Absent Only</button>
+                </div>
+            </div>
+
+            <div class="info-note">
+                💡 <strong>Manual Entry:</strong> Click on a student card to toggle present/absent. Use "Late" button to mark as late arrival.
+            </div>
+
+            <div class="attendance-grid" id="attendanceGrid">
+                <p style="text-align: center; color: var(--text-muted); padding: 20px; grid-column: 1/-1;">
+                    No students registered. Please register students first.
+                </p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="exportAttendance()">📥 Export Today's Attendance</button>
+                <button class="btn btn-secondary" onclick="markAllPresent()">✓ Mark All Present</button>
+                <button class="btn btn-secondary" onclick="clearTodayAttendance()">🔄 Reset Today</button>
+                <a href="./register-students.html" class="btn btn-primary">📝 Register Students</a>
+                <a href="./attendance-overview.html" class="btn btn-primary">📊 View Overview</a>
+                <a href="../index.html" class="btn btn-secondary">🏠 Back to Home</a>
+            </div>
+
+            <div class="history-section" id="historySection" style="display: none;">
+                <h3>Attendance History</h3>
+                <div id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/.netlify/functions';
+        let currentView = 'all';
+        let attendanceData = { attendance: [], stats: {} };
+
+        // Get current date in YYYY-MM-DD format
+        function getCurrentDate() {
+            const dateEl = document.getElementById('attendanceDate');
+            if (!dateEl) return new Date().toISOString().split('T')[0];
+            return dateEl.value || new Date().toISOString().split('T')[0];
+        }
+
+        // Get attendance for specific date from database
+        async function getAttendanceForDate(date) {
+            try {
+                const response = await fetch(`${API_BASE}/get-attendance?date=${date}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    attendanceData = data;
+                    return data;
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error fetching attendance:', error);
+                showStatus('Error loading attendance: ' + error.message, false);
+                return { attendance: [], stats: { total: 0, present: 0, absent: 0 } };
+            }
+        }
+
+        // Get all attendance history from database
+        async function getAllAttendanceHistory() {
+            try {
+                const response = await fetch(`${API_BASE}/get-attendance-history`);
+                const data = await response.json();
+
+                if (data.success) {
+                    return data.history;
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error fetching history:', error);
+                return [];
+            }
+        }
+
+        // Parse card data
+        function parseCardData(rawData) {
+            const match = rawData.match(/\^([^\/]+)\/([^\^]+)\^/);
+
+            if (match) {
+                const lastName = match[1].trim();
+                const firstName = match[2].trim();
+                return {
+                    lastName,
+                    firstName,
+                    fullName: `${firstName} ${lastName}`
+                };
+            }
+            return null;
+        }
+
+        // Show status message
+        function showStatus(message, isSuccess = true) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${isSuccess ? 'success' : 'error'}`;
+
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 2000);
+        }
+
+        // Mark student present
+        async function markPresent(studentData) {
+            const date = getCurrentDate();
+
+            try {
+                const response = await fetch(`${API_BASE}/mark-attendance`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstName: studentData.firstName,
+                        lastName: studentData.lastName,
+                        date: date
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showStatus(`✓ ${studentData.fullName} marked present!`, true);
+                    await updateUI();
+                    return true;
+                } else {
+                    if (response.status === 404) {
+                        showStatus(`${studentData.fullName} is not registered! Please register first.`, false);
+                    } else if (response.status === 409) {
+                        showStatus(`${studentData.fullName} already marked present!`, false);
+                    } else {
+                        showStatus(`Error: ${data.error}`, false);
+                    }
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error marking attendance:', error);
+                showStatus('Error marking attendance: ' + error.message, false);
+                return false;
+            }
+        }
+
+        // Toggle student attendance manually
+        async function toggleAttendance(lastName, firstName, fullName, isPresent, event) {
+            // Prevent card click when clicking buttons
+            if (event && event.target.closest('.action-btn')) {
+                return;
+            }
+
+            const date = getCurrentDate();
+            console.log('toggleAttendance called:', {lastName, firstName, fullName, isPresent, date});
+
+            try {
+                const method = isPresent ? 'DELETE' : 'POST';
+                const payload = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    date: date,
+                    isLate: false
+                };
+
+                console.log('Sending request:', method, payload);
+
+                const response = await fetch(`${API_BASE}/mark-attendance`, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.success) {
+                    showStatus(data.message, true);
+                    await updateUI();
+                } else {
+                    console.error('API returned error:', data.error);
+                    showStatus(`Error: ${data.error}`, false);
+                }
+            } catch (error) {
+                console.error('Error toggling attendance:', error);
+                showStatus('Error toggling attendance: ' + error.message, false);
+            }
+        }
+
+        // Mark student as late
+        async function markLate(lastName, firstName, fullName, event) {
+            event.stopPropagation(); // Prevent card click event
+            const date = getCurrentDate();
+
+            try {
+                const response = await fetch(`${API_BASE}/mark-attendance`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstName: firstName,
+                        lastName: lastName,
+                        date: date,
+                        isLate: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showStatus(`⏱️ ${fullName} marked late`, true);
+                    await updateUI();
+                } else {
+                    showStatus(`Error: ${data.error}`, false);
+                }
+            } catch (error) {
+                console.error('Error marking late:', error);
+                showStatus('Error marking late: ' + error.message, false);
+            }
+        }
+
+        // Toggle view
+        function toggleView(view) {
+            currentView = view;
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`view${view.charAt(0).toUpperCase() + view.slice(1)}`).classList.add('active');
+            updateUI();
+        }
+
+        // Update UI
+        async function updateUI() {
+            const date = getCurrentDate();
+            const data = await getAttendanceForDate(date);
+            const grid = document.getElementById('attendanceGrid');
+
+            // Compute stats if not provided by API
+            if (!data.stats || typeof data.stats !== 'object') {
+                const total = data.attendance ? data.attendance.length : 0;
+                const present = data.attendance ? data.attendance.filter(s => s.present).length : 0;
+                const absent = total - present;
+                data.stats = { total, present, absent };
+            }
+
+            // Update stats
+            document.getElementById('presentCount').textContent = data.stats.present || 0;
+            document.getElementById('absentCount').textContent = data.stats.absent || 0;
+            document.getElementById('totalCount').textContent = data.stats.total || 0;
+
+            // Update attendance grid
+            if (!data.attendance || data.attendance.length === 0) {
+                grid.innerHTML = `
+                    <p style="text-align: center; color: var(--text-muted); padding: 20px; grid-column: 1/-1;">
+                        No students registered. Please <a href="./register-students.html">register students</a> first.
+                    </p>
+                `;
+                return;
+            }
+
+            // Filter based on view
+            let filteredStudents = data.attendance;
+            if (currentView === 'present') {
+                filteredStudents = data.attendance.filter(s => s.present);
+            } else if (currentView === 'absent') {
+                filteredStudents = data.attendance.filter(s => !s.present);
+            }
+
+            grid.innerHTML = filteredStudents.map(student => {
+                const statusClass = student.present ? (student.is_late ? 'late' : 'present') : 'absent';
+                const statusText = student.present ? (student.is_late ? '⏱️ Late' : '✓ Present') : '✗ Absent';
+                const badgeClass = student.present ? (student.is_late ? 'badge-late' : 'badge-present') : 'badge-absent';
+                const timeText = student.present && student.timestamp ?
+                    new Date(student.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '';
+
+                return `
+                    <div class="student-card ${statusClass}"
+                         data-student-id="${student.id || ''}"
+                         data-last-name="${student.last_name}"
+                         data-first-name="${student.first_name}"
+                         data-full-name="${student.full_name}"
+                         data-present="${student.present}">
+                        <div class="student-info">
+                            <div class="student-name">${student.full_name}</div>
+                            ${timeText ? `<div class="student-time">Marked at ${timeText}</div>` : ''}
+                        </div>
+                        <div class="student-actions">
+                            ${!student.present ?
+                                `<button class="action-btn btn-late"
+                                         data-action="mark-late"
+                                         data-last-name="${student.last_name}"
+                                         data-first-name="${student.first_name}"
+                                         data-full-name="${student.full_name}">Late</button>`
+                                : ''
+                            }
+                            <span class="attendance-badge ${badgeClass}">
+                                ${statusText}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Mark all present
+        async function markAllPresent() {
+            if (!confirm('Mark all students present for today?')) {
+                return;
+            }
+
+            const date = getCurrentDate();
+            const data = await getAttendanceForDate(date);
+
+            if (!data.attendance || data.attendance.length === 0) {
+                alert('No students to mark');
+                return;
+            }
+
+            try {
+                // Mark all absent students present
+                const absentStudents = data.attendance.filter(s => !s.present);
+
+                for (const student of absentStudents) {
+                    await fetch(`${API_BASE}/mark-attendance`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            firstName: student.first_name,
+                            lastName: student.last_name,
+                            date: date
+                        })
+                    });
+                }
+
+                showStatus('All students marked present!', true);
+                await updateUI();
+            } catch (error) {
+                console.error('Error marking all present:', error);
+                showStatus('Error marking all present: ' + error.message, false);
+            }
+        }
+
+        // Clear today's attendance
+        async function clearTodayAttendance() {
+            if (!confirm('Clear all attendance for today?')) {
+                return;
+            }
+
+            const date = getCurrentDate();
+            const data = await getAttendanceForDate(date);
+
+            if (!data.attendance) {
+                return;
+            }
+
+            try {
+                // Mark all present students absent
+                const presentStudents = data.attendance.filter(s => s.present);
+
+                for (const student of presentStudents) {
+                    await fetch(`${API_BASE}/mark-attendance`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            firstName: student.first_name,
+                            lastName: student.last_name,
+                            date: date
+                        })
+                    });
+                }
+
+                showStatus('Attendance cleared', true);
+                await updateUI();
+            } catch (error) {
+                console.error('Error clearing attendance:', error);
+                showStatus('Error clearing attendance: ' + error.message, false);
+            }
+        }
+
+        // Export attendance
+        async function exportAttendance() {
+            const date = getCurrentDate();
+            const data = await getAttendanceForDate(date);
+
+            if (!data.attendance || data.attendance.length === 0) {
+                alert('No students to export');
+                return;
+            }
+
+            // Create CSV content
+            const headers = ['Last Name', 'First Name', 'Full Name', 'Status', 'Time'];
+            const rows = data.attendance.map(s => [
+                s.last_name,
+                s.first_name,
+                s.full_name,
+                s.present ? 'Present' : 'Absent',
+                s.present && s.timestamp ? new Date(s.timestamp).toLocaleTimeString() : ''
+            ]);
+
+            const csv = [
+                `"Attendance for ${date}"`,
+                `"Total: ${data.stats.total}, Present: ${data.stats.present}, Absent: ${data.stats.absent}"`,
+                '',
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `csci5403-attendance-${date}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // View history
+        async function viewHistory() {
+            const historySection = document.getElementById('historySection');
+            const historyList = document.getElementById('historyList');
+            const history = await getAllAttendanceHistory();
+
+            if (history.length === 0) {
+                alert('No attendance history yet');
+                return;
+            }
+
+            historySection.style.display = 'block';
+
+            historyList.innerHTML = history.map(record => {
+                const date = record.attendance_date;
+                return `
+                    <div class="history-item" onclick="loadDate('${date}')">
+                        <strong>${new Date(date).toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric'
+                        })}</strong><br>
+                        Present: ${record.present_count} / ${record.total_students} students
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Load specific date
+        function loadDate(date) {
+            document.getElementById('attendanceDate').value = date;
+            document.getElementById('historySection').style.display = 'none';
+            updateUI();
+        }
+
+        // Handle card input
+        const cardInput = document.getElementById('cardInput');
+        const swipeArea = document.getElementById('swipeArea');
+
+        swipeArea.addEventListener('click', () => {
+            cardInput.focus();
+        });
+
+        // Keep input focused, but not when interacting with buttons
+        cardInput.addEventListener('blur', (e) => {
+            // Don't refocus if user clicked a button, link, or input
+            if (e.relatedTarget && (
+                e.relatedTarget.tagName === 'BUTTON' ||
+                e.relatedTarget.tagName === 'A' ||
+                e.relatedTarget.tagName === 'INPUT'
+            )) {
+                return;
+            }
+            setTimeout(() => cardInput.focus(), 100);
+        });
+
+        cardInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+
+            if (value.includes('?')) {
+                const studentData = parseCardData(value);
+
+                if (studentData) {
+                    markPresent(studentData);
+                } else {
+                    showStatus('Could not read card data. Please try again.', false);
+                }
+
+                cardInput.value = '';
+            }
+        });
+
+        // Event delegation for student card clicks
+        document.getElementById('attendanceGrid').addEventListener('click', async (e) => {
+            // Prevent default and propagation to avoid scroll issues
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Check if Late button was clicked
+            const lateBtn = e.target.closest('[data-action="mark-late"]');
+            if (lateBtn) {
+                const lastName = lateBtn.dataset.lastName;
+                const firstName = lateBtn.dataset.firstName;
+                const fullName = lateBtn.dataset.fullName;
+                console.log('Marking late:', fullName);
+                await markLate(lastName, firstName, fullName, e);
+                return;
+            }
+
+            // Check if student card was clicked
+            const card = e.target.closest('.student-card');
+            if (card) {
+                // Don't toggle if clicking on badge or button
+                if (e.target.closest('.attendance-badge') || e.target.closest('.action-btn')) {
+                    return;
+                }
+
+                const lastName = card.dataset.lastName;
+                const firstName = card.dataset.firstName;
+                const fullName = card.dataset.fullName;
+                const isPresent = card.dataset.present === 'true';
+                console.log('Toggling attendance:', fullName, 'Currently present:', isPresent);
+                await toggleAttendance(lastName, firstName, fullName, isPresent, e);
+            }
+        });
+
+        // Initialize with authentication
+        ClassroomAuth.initAuthUI({
+            pageName: 'Attendance Tracking',
+            onSuccess: function() {
+                // Set today's date after auth succeeds
+                const dateEl = document.getElementById('attendanceDate');
+                if (dateEl) {
+                    dateEl.value = new Date().toISOString().split('T')[0];
+                    // Add date change handler
+                    dateEl.addEventListener('change', updateUI);
+                }
+
+                updateUI();
+                cardInput.focus();
+            }
+        });
+
+        // Keep focus on input, but not when interacting with UI elements
+        let lastClickTime = 0;
+        document.addEventListener('click', () => {
+            lastClickTime = Date.now();
+        });
+
+        setInterval(() => {
+            // Don't refocus if user just clicked (within last 3 seconds)
+            if (Date.now() - lastClickTime < 3000) {
+                return;
+            }
+
+            const activeElement = document.activeElement;
+            // Only refocus if nothing else is focused or if body is focused
+            if (!activeElement || activeElement === document.body) {
+                cardInput.focus();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

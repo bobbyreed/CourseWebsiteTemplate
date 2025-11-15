@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineering - CSCI 5403</title>
+    <meta name="description" content="Graduate Software Engineering course (CSCI 5403) at Oklahoma City University - covering Agile, Scrum, CI/CD, architecture, testing, and modern development practices.">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <link rel="stylesheet" href="./styles/presentation.css">
+
+    <style>
+        :root {
+            --ocu-true-blue: #00447c;
+            --ocu-dark-blue: #002d5c;
+            --ocu-cyan: #00bfdf;
+            --ocu-gold: #fdb913;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --bg-primary: #fff;
+            --bg-secondary: #f8f9fa;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --card-bg: white;
+            --link-color: #00447c;
+            --link-hover: #00bfdf;
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --card-bg: #2a2a2a;
+            --link-color: #00bfdf;
+            --link-hover: #fdb913;
+            --theme-toggle-bg-rgb: 42, 42, 42;
+        }
+
+        :root {
+            --theme-toggle-bg-rgb: 255, 255, 255;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #7BA5CC;
+            background-attachment: fixed;
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background 0.3s ease;
+            position: relative;
+        }
+
+        /* Blueprint grid overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(230, 240, 250, 0.6) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(230, 240, 250, 0.6) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            opacity: 0.7;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Dark mode background */
+        [data-theme="dark"] body {
+            background: #0F172A;
+        }
+
+        [data-theme="dark"] body::before {
+            background-image:
+                linear-gradient(rgba(51, 65, 85, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(51, 65, 85, 0.3) 1px, transparent 1px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--ocu-true-blue) 0%, var(--ocu-dark-blue) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        header h1,
+        header p {
+            color: white !important;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .meta-info {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .nav-button {
+            background: var(--ocu-gold);
+            color: var(--ocu-dark-blue);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-button:hover {
+            background: var(--ocu-cyan);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 191, 223, 0.3);
+        }
+
+        .info-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px var(--shadow);
+        }
+
+        .info-section h2 {
+            color: var(--ocu-true-blue);
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--ocu-cyan);
+            padding-bottom: 10px;
+        }
+
+        [data-theme="dark"] .info-section h2 {
+            color: var(--ocu-cyan);
+        }
+
+        .info-section p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .info-section ul {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+
+        .info-section li {
+            margin-bottom: 10px;
+        }
+
+        .info-section a {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+
+        .info-section a:hover {
+            color: var(--link-hover);
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .quick-link-card {
+            background: #C0C0C0;
+            border: none;
+            padding: 0;
+            text-align: center;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            box-shadow:
+                inset -1px -1px 0px #000000,
+                inset 1px 1px 0px #FFFFFF,
+                inset -2px -2px 0px #808080,
+                inset 2px 2px 0px #DFDFDF;
+        }
+
+        .quick-link-card::before {
+            content: '';
+            display: block;
+            height: 24px;
+            background: linear-gradient(to right, #000080, #1084D0);
+            box-shadow:
+                inset -1px -1px 0px #000000,
+                inset 1px 1px 0px #FFFFFF;
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .quick-link-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .quick-link-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        [data-theme="dark"] .quick-link-title {
+            color: #000;
+        }
+
+        .quick-link-description {
+            color: #000;
+            font-size: 0.95em;
+        }
+
+        .lectures-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px var(--shadow);
+        }
+
+        .lectures-section h2 {
+            color: var(--ocu-true-blue);
+            font-size: 2em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--ocu-cyan);
+            padding-bottom: 10px;
+        }
+
+        [data-theme="dark"] .lectures-section h2 {
+            color: var(--ocu-cyan);
+        }
+
+        .lectures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .lecture-card {
+            background: #C0C0C0;
+            border: none;
+            padding: 0;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            min-height: 140px;
+            box-shadow:
+                inset -1px -1px 0px #000000,
+                inset 1px 1px 0px #FFFFFF,
+                inset -2px -2px 0px #808080,
+                inset 2px 2px 0px #DFDFDF;
+        }
+
+        [data-theme="dark"] .lecture-card {
+            background: #C0C0C0;
+            color: #000;
+        }
+
+        .lecture-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .lecture-card::before {
+            content: '';
+            display: block;
+            height: 24px;
+            background: linear-gradient(to right, #000080, #1084D0);
+            padding: 2px 4px;
+            box-shadow:
+                inset -1px -1px 0px #000000,
+                inset 1px 1px 0px #FFFFFF;
+        }
+
+        .lecture-card.completed::before {
+            background: linear-gradient(to right, #008000, #00C000);
+        }
+
+        .lecture-card.current::before {
+            background: linear-gradient(to right, #C08000, #FFB000);
+        }
+
+        .lecture-number {
+            background: #C0C0C0;
+            color: #000;
+            padding: 2px 8px;
+            border: none;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 8px;
+            margin-top: 8px;
+            box-shadow:
+                inset -1px -1px 0px #000000,
+                inset 1px 1px 0px #FFFFFF,
+                inset -2px -2px 0px #808080,
+                inset 2px 2px 0px #DFDFDF;
+            font-weight: bold;
+        }
+
+        [data-theme="dark"] .lecture-number {
+            background: #C0C0C0;
+            color: #000;
+        }
+
+        .lecture-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .lecture-date {
+            color: #000;
+            font-size: 0.9em;
+        }
+
+        .lecture-unavailable {
+            opacity: 0.6;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .lecture-unavailable:hover {
+            transform: none !important;
+        }
+
+        [data-theme="dark"] .lecture-unavailable:hover {
+            /* No change needed for Windows 95 style */
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--ocu-true-blue) 0%, var(--ocu-dark-blue) 100%);
+            text-align: center;
+            color: white !important;
+            padding: 20px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            color: white !important;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1.2em;
+            }
+
+            .lectures-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            .theme-tab {
+                width: 30px;
+                height: 50px;
+                font-size: 1em;
+            }
+        }
+
+        /* Theme Toggle - Top Right with Auto-Hide */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(var(--theme-toggle-bg-rgb), 0.65);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle.controls-hidden {
+            opacity: 0;
+            transform: translateX(calc(100% - 50px));
+            pointer-events: none;
+        }
+
+        .theme-toggle.controls-hidden .theme-tab {
+            pointer-events: all;
+            opacity: 1;
+        }
+
+        .theme-tab {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 60px;
+            background: rgba(var(--theme-toggle-bg-rgb), 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px 0 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: none;
+            opacity: 0;
+            transition: opacity 0.3s ease, background 0.2s ease;
+        }
+
+        [data-theme="dark"] .theme-tab {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle.controls-hidden .theme-tab {
+            opacity: 0.7;
+        }
+
+        .theme-tab:hover {
+            background: rgba(var(--theme-toggle-bg-rgb), 0.95);
+            opacity: 1 !important;
+        }
+
+        .theme-toggle-label {
+            font-size: 0.9em;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .theme-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            display: inline-block;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .theme-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .theme-slider {
+            background-color: var(--ocu-cyan);
+        }
+
+        input:checked + .theme-slider:before {
+            transform: translateX(24px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <div class="theme-tab">⚙️</div>
+        <span class="theme-toggle-label">Light</span>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-checkbox">
+            <span class="theme-slider"></span>
+        </label>
+        <span class="theme-toggle-label">Dark</span>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Software Engineering</h1>
+            <p class="subtitle">CSCI 5403 - Graduate Course</p>
+            <p class="meta-info">Block 2, 2025 | Instructor: Professor Bobby Reed</p>
+        </header>
+
+        <div class="info-section">
+            <h2>📚 Course Overview</h2>
+            <p>Welcome to Software Engineering! This 8-week graduate course provides an intensive overview of the major aspects of contemporary software engineering, introducing you to the software development life cycle as defined by various software engineering paradigms.</p>
+
+            <p><strong>Course Focus:</strong> Development of a team programming project, including comprehensive system documentation, is a central component of this course. You'll gain hands-on experience with industry-standard tools, methodologies, and best practices used in modern software development.</p>
+
+            <p><strong>What You'll Learn:</strong></p>
+            <ul>
+                <li>🎯 Agile methodologies and Scrum framework</li>
+                <li>🎯 Software project management and CI/CD pipelines</li>
+                <li>🎯 Software architecture patterns and design principles</li>
+                <li>🎯 Cloud-based software and microservices architecture</li>
+                <li>🎯 Security, privacy, and reliable programming practices</li>
+                <li>🎯 Testing strategies and DevOps workflows</li>
+                <li>🎯 UML modeling and system documentation</li>
+            </ul>
+
+            <p><strong>Important Information:</strong></p>
+            <ul>
+                <li>📧 Email: bobby.reed@okcu.edu</li>
+                <li>🏢 Office: Sarkeys Science and Math Center (SSM) - 204A</li>
+                <li>💬 Office Hours: Posted on D2L</li>
+                <li>📖 Course Materials: Accessible through D2L</li>
+                <li>⚡ Intensity: This is an 8-week course covering a full semester's worth of material!</li>
+            </ul>
+        </div>
+
+        <div class="quick-links">
+            <a href="https://ocuonline.okcu.edu" target="_blank" class="quick-link-card">
+                <div style="flex: 1; padding: 20px; background: white;">
+                    <div class="quick-link-icon">📚</div>
+                    <div class="quick-link-title">D2L</div>
+                    <div class="quick-link-description">Access course materials & submit assignments</div>
+                </div>
+            </a>
+
+            <a href="https://www.scrumguides.org/" target="_blank" class="quick-link-card">
+                <div style="flex: 1; padding: 20px; background: white;">
+                    <div class="quick-link-icon">📖</div>
+                    <div class="quick-link-title">Scrum Guide</div>
+                    <div class="quick-link-description">Official Scrum framework documentation</div>
+                </div>
+            </a>
+
+            <a href="https://app.diagrams.net/" target="_blank" class="quick-link-card">
+                <div style="flex: 1; padding: 20px; background: white;">
+                    <div class="quick-link-icon">📐</div>
+                    <div class="quick-link-title">draw.io</div>
+                    <div class="quick-link-description">Create UML diagrams online</div>
+                </div>
+            </a>
+
+            <a href="https://github.com" target="_blank" class="quick-link-card">
+                <div style="flex: 1; padding: 20px; background: white;">
+                    <div class="quick-link-icon">💻</div>
+                    <div class="quick-link-title">GitHub</div>
+                    <div class="quick-link-description">Version control & collaboration</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="lectures-section">
+            <h2>📅 Course Schedule & Lectures</h2>
+
+            <div class="lectures-grid" id="lectures-grid">
+                <!-- Lectures will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 bobby reed</p>
+        </footer>
+    </div>
+
+    <script>
+    // Lectures data - Software Engineering (CSCI 5403)
+    const lectures = [
+        { number: 1, title: "Welcome & Syllabus Overview", date: "2025-10-24", link: "./pages/lectures/1Welcome.html" },
+        { number: 2, title: "Agile Software Engineering", date: "2025-10-29", link: "./pages/lectures/2Agile.html" },
+        { number: 3, title: "Project Management", date: "2025-10-31", link: "./pages/lectures/3ProjectMangement.html" },
+        { number: 4, title: "CI/CD Pipelines", date: "2025-11-05", link: "./pages/lectures/4CICD.html" },
+        { number: 5, title: "Software Architecture", date: "2025-11-07", link: "./pages/lectures/5SoftwareArchitecture.html" },
+        { number: 6, title: "Vibe Coding", date: "2025-11-12", link: "./pages/lectures/6VibeCoding.html" },
+        { number: 7, title: "Cloud-Based Software", date: "2025-11-14", link: "./pages/lectures/7CloudbasedSoftware.html" },
+        { number: 8, title: "Vibe Coding Presentations", date: "2025-11-19", link: "./pages/lectures/8VibeCodingPresentations.html" },
+        { number: 9, title: "Microservices Architecture", date: "2025-11-21", link: "./pages/lectures/9Microservices.html" },
+        { number: 10, title: "Security & Privacy", date: "2025-11-26", link: "./pages/lectures/10Security.html" },
+        { number: 11, title: "Reliable Programming", date: "2025-12-03", link: "./pages/lectures/11ReliableProgramming.html" },
+        { number: 12, title: "Testing", date: "2025-12-05", link: "./pages/lectures/12Testing.html" },
+        { number: 13, title: "DevOps & Code Management", date: "2025-12-10", link: "./pages/lectures/13DevOps.html" },
+        { number: 14, title: "Final Exam Review", date: "2025-12-12", link: "./pages/lectures/14FinalReview.html" },
+        { number: 15, title: "Final Exam", date: "2025-12-17", link: "./pages/lectures/15Final.html" }
+    ];
+
+    /**
+     * Render lectures with availability logic:
+     * - Lectures are locked until the day before their scheduled date
+     * - Lectures can be explicitly marked as unavailable with available: false
+     * - Visual indicators show completed (green), current week (gold), and locked (grayed out)
+     */
+    function renderLectures() {
+        const grid = document.getElementById('lectures-grid');
+        if (!grid) return;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset to start of day for accurate comparison
+
+        lectures.forEach(lecture => {
+            const lectureDate = new Date(lecture.date);
+            lectureDate.setHours(0, 0, 0, 0);
+
+            // Calculate days until lecture
+            const daysUntilLecture = Math.floor((lectureDate - today) / (1000 * 60 * 60 * 24));
+
+            // Lecture is available if:
+            // 1. It's not explicitly marked as unavailable (available !== false)
+            // AND
+            // 2. It's either today, in the past, or tomorrow (day before)
+            const isLocked = lecture.available === false || daysUntilLecture > 1;
+
+            const isCompleted = lectureDate < today;
+            const isCurrent = daysUntilLecture >= 0 && daysUntilLecture <= 7;
+
+            const card = document.createElement('a');
+            card.className = 'lecture-card';
+
+            if (isCompleted && !isLocked) card.classList.add('completed');
+            if (isCurrent && !isLocked) card.classList.add('current');
+
+            if (isLocked) {
+                card.href = '#';
+                card.classList.add('lecture-unavailable');
+                card.onclick = (e) => e.preventDefault();
+            } else {
+                card.href = lecture.link;
+            }
+
+            // Format the status message
+            let statusMessage = '';
+            if (lecture.available === false) {
+                statusMessage = '<div style="color: #808080; font-size: 0.9em; margin-top: 5px;">Coming Soon</div>';
+            } else if (daysUntilLecture > 1) {
+                statusMessage = `<div style="color: #808080; font-size: 0.9em; margin-top: 5px;">Available in ${daysUntilLecture} days</div>`;
+            } else if (daysUntilLecture === 1) {
+                statusMessage = '<div style="color: #008080; font-size: 0.9em; margin-top: 5px;">Available tomorrow</div>';
+            }
+
+            card.innerHTML = `
+                <div style="flex: 1; padding: 12px; background: white;">
+                    <span class="lecture-number">Class ${lecture.number}</span>
+                    <div class="lecture-title">${lecture.title}</div>
+                    <div class="lecture-date">${lectureDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    })}</div>
+                    ${statusMessage}
+                </div>
+            `;
+
+            grid.appendChild(card);
+        });
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+        // Render lectures
+        renderLectures();
+
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-checkbox');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Auto-hide theme toggle functionality
+        const themeToggleEl = document.querySelector('.theme-toggle');
+        const themeTab = document.querySelector('.theme-tab');
+        let hideTimer = null;
+        const hideDelay = 2000; // 2 seconds
+
+        // Show theme toggle
+        const showThemeToggle = () => {
+            themeToggleEl.classList.remove('controls-hidden');
+            resetHideTimer();
+        };
+
+        // Reset the hide timer
+        const resetHideTimer = () => {
+            if (hideTimer) {
+                clearTimeout(hideTimer);
+            }
+            hideTimer = setTimeout(() => {
+                themeToggleEl.classList.add('controls-hidden');
+            }, hideDelay);
+        };
+
+        // Show on mouse movement
+        document.addEventListener('mousemove', showThemeToggle);
+
+        // Show when hovering over tab
+        if (themeTab) {
+            themeTab.addEventListener('mouseenter', () => {
+                themeToggleEl.classList.remove('controls-hidden');
+            });
+        }
+
+        // Keep visible when hovering over control
+        themeToggleEl.addEventListener('mouseenter', () => {
+            if (hideTimer) {
+                clearTimeout(hideTimer);
+            }
+        });
+
+        themeToggleEl.addEventListener('mouseleave', () => {
+            resetHideTimer();
+        });
+
+        // Start initial hide timer
+        resetHideTimer();
+    });
+    </script>
+</body>
+</html>
