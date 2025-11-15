@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Test - Template Validation</title>
+    <link rel="stylesheet" href="template/styles/theme-variables.css">
+    <link rel="stylesheet" href="template/styles/presentation.css">
+    <style>
+        body {
+            background: #f0f0f0;
+            padding: 0;
+            margin: 0;
+        }
+        #test-results {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            max-width: 400px;
+            z-index: 2000;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .test-pass { color: green; }
+        .test-fail { color: red; }
+        .test-info { color: blue; }
+    </style>
+</head>
+<body>
+    <div id="test-results">
+        <h3>Integration Test Results</h3>
+        <div id="results-list"></div>
+        <button onclick="runTests()" style="margin-top: 10px;">Run Tests</button>
+    </div>
+
+    <div class="presentation-container">
+        <div id="timer-display" class="timer-display">
+            <span id="timer-text">Integration Test
+                <button class="home"><a href="#">Home</a></button>
+            </span>
+        </div>
+
+        <div class="slide active">
+            <h1>Integration Test Slide 1</h1>
+            <p>Testing presentation system...</p>
+        </div>
+
+        <div class="slide">
+            <h1>Integration Test Slide 2</h1>
+            <p>This is the second slide.</p>
+            <div class="tip-box">
+                <strong>Tip:</strong> Test component rendering
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Integration Test Slide 3</h1>
+            <div class="code-example">
+                function test() {
+                    return true;
+                }
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">3</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <script src="template/js/presentation.js"></script>
+    <script>
+        function log(message, type = 'info') {
+            const resultsDiv = document.getElementById('results-list');
+            const p = document.createElement('p');
+            p.className = 'test-' + type;
+            p.textContent = message;
+            resultsDiv.appendChild(p);
+        }
+
+        function runTests() {
+            const resultsDiv = document.getElementById('results-list');
+            resultsDiv.innerHTML = '';
+
+            let passed = 0;
+            let failed = 0;
+
+            // Test 1: PresentationController loaded
+            try {
+                if (typeof PresentationController !== 'undefined') {
+                    log('✓ PresentationController class loaded', 'pass');
+                    passed++;
+                } else {
+                    log('✗ PresentationController not found', 'fail');
+                    failed++;
+                }
+            } catch (e) {
+                log('✗ Error loading PresentationController: ' + e.message, 'fail');
+                failed++;
+            }
+
+            // Test 2: Presentation instance created
+            try {
+                if (window.presentation instanceof PresentationController) {
+                    log('✓ Presentation instance created', 'pass');
+                    passed++;
+                } else {
+                    log('✗ Presentation instance not created', 'fail');
+                    failed++;
+                }
+            } catch (e) {
+                log('✗ Error checking instance: ' + e.message, 'fail');
+                failed++;
+            }
+
+            // Test 3: Slides detected
+            const slides = document.querySelectorAll('.slide');
+            if (slides.length === 3) {
+                log('✓ All 3 slides detected', 'pass');
+                passed++;
+            } else {
+                log('✗ Expected 3 slides, found ' + slides.length, 'fail');
+                failed++;
+            }
+
+            // Test 4: Active slide
+            const activeSlide = document.querySelector('.slide.active');
+            if (activeSlide) {
+                log('✓ Active slide present', 'pass');
+                passed++;
+            } else {
+                log('✗ No active slide', 'fail');
+                failed++;
+            }
+
+            // Test 5: Navigation buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            if (prevBtn && nextBtn) {
+                log('✓ Navigation buttons present', 'pass');
+                passed++;
+            } else {
+                log('✗ Navigation buttons missing', 'fail');
+                failed++;
+            }
+
+            // Test 6: Theme toggle
+            const themeCheckbox = document.getElementById('theme-checkbox');
+            if (themeCheckbox) {
+                log('✓ Theme toggle created', 'pass');
+                passed++;
+            } else {
+                log('✗ Theme toggle missing', 'fail');
+                failed++;
+            }
+
+            // Test 7: CSS variables loaded
+            const primaryColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--primary-color').trim();
+            if (primaryColor) {
+                log('✓ CSS variables loaded: ' + primaryColor, 'pass');
+                passed++;
+            } else {
+                log('✗ CSS variables not loaded', 'fail');
+                failed++;
+            }
+
+            // Test 8: Slide counter
+            const currentSlide = document.getElementById('currentSlide');
+            const totalSlides = document.getElementById('totalSlides');
+            if (currentSlide && totalSlides) {
+                if (currentSlide.textContent === '1' && totalSlides.textContent === '3') {
+                    log('✓ Slide counter correct (1/3)', 'pass');
+                    passed++;
+                } else {
+                    log('✗ Slide counter incorrect: ' + currentSlide.textContent + '/' + totalSlides.textContent, 'fail');
+                    failed++;
+                }
+            } else {
+                log('✗ Slide counter elements missing', 'fail');
+                failed++;
+            }
+
+            // Test 9: Methods exist
+            const methods = ['showSlide', 'changeSlide', 'toggleTheme', 'startTimer'];
+            let methodsPass = true;
+            methods.forEach(method => {
+                if (typeof window.presentation[method] !== 'function') {
+                    methodsPass = false;
+                }
+            });
+            if (methodsPass) {
+                log('✓ All core methods present', 'pass');
+                passed++;
+            } else {
+                log('✗ Some methods missing', 'fail');
+                failed++;
+            }
+
+            // Test 10: Navigate to next slide
+            try {
+                window.presentation.changeSlide(1);
+                setTimeout(() => {
+                    const newCurrent = document.getElementById('currentSlide').textContent;
+                    if (newCurrent === '2') {
+                        log('✓ Slide navigation works', 'pass');
+                    } else {
+                        log('✗ Slide navigation failed', 'fail');
+                    }
+
+                    // Navigate back
+                    window.presentation.changeSlide(-1);
+                }, 100);
+                passed++;
+            } catch (e) {
+                log('✗ Navigation error: ' + e.message, 'fail');
+                failed++;
+            }
+
+            // Summary
+            setTimeout(() => {
+                log('-------------------', 'info');
+                log('Total: ' + (passed + failed) + ' tests', 'info');
+                log('Passed: ' + passed, 'pass');
+                log('Failed: ' + failed, 'fail');
+                log('Pass Rate: ' + Math.round(passed / (passed + failed) * 100) + '%', 'info');
+            }, 200);
+        }
+
+        // Auto-run tests on load
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 1000);
+        });
+    </script>
+</body>
+</html>

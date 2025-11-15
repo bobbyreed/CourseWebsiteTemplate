@@ -1,0 +1,30 @@
+# Netlify Configuration for Course Website Template
+# This file configures serverless functions and build settings
+
+[build]
+  # The directory Netlify should serve
+  publish = "."
+
+  # Functions directory for serverless backend
+  functions = "netlify/functions"
+
+# Environment variables (set these in Netlify dashboard)
+# Required for attendance tracking feature:
+# - DATABASE_URL: Your Neon PostgreSQL connection string
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Redirects (optional - customize as needed)
+# [[redirects]]
+#   from = "/old-path"
+#   to = "/new-path"
+#   status = 301

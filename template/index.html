@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Title - Course Number</title>
+    <meta name="description" content="Course description for SEO purposes">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.png">
+    <link rel="stylesheet" href="./styles/presentation.css">
+    <link rel="stylesheet" href="./styles/theme-variables.css">
+
+    <style>
+        /* ===================================
+           HOMEPAGE SPECIFIC STYLES
+           Customize colors in theme-variables.css
+           =================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        header h1,
+        header p {
+            color: white !important;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .meta-info {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* Navigation Buttons (Optional) */
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: var(--accent-color);
+            color: var(--primary-dark);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-button:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        /* Info Section */
+        .info-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px var(--shadow);
+        }
+
+        .info-section h2 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        [data-theme="dark"] .info-section h2 {
+            color: var(--secondary-color);
+        }
+
+        .info-section p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .info-section ul {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+
+        .info-section li {
+            margin-bottom: 10px;
+        }
+
+        .info-section a {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+
+        .info-section a:hover {
+            color: var(--link-hover);
+        }
+
+        /* Quick Links Grid (Optional) */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .quick-link-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px var(--shadow);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 2px solid transparent;
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary-color);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .quick-link-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .quick-link-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        [data-theme="dark"] .quick-link-title {
+            color: var(--secondary-color);
+        }
+
+        .quick-link-description {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        /* Lectures Section */
+        .lectures-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px var(--shadow);
+        }
+
+        .lectures-section h2 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        [data-theme="dark"] .lectures-section h2 {
+            color: var(--secondary-color);
+        }
+
+        .lectures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Lecture Cards */
+        .lecture-card {
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-primary);
+            display: block;
+            min-height: 140px;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        [data-theme="dark"] .lecture-card {
+            border-color: #444;
+        }
+
+        .lecture-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow);
+        }
+
+        .lecture-card.completed {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.05);
+        }
+
+        .lecture-card.current {
+            border-color: var(--accent-color);
+            background: rgba(253, 185, 19, 0.05);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 2px 5px var(--shadow); }
+            50% { box-shadow: 0 2px 15px rgba(253, 185, 19, 0.3); }
+        }
+
+        .lecture-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .lecture-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .lecture-date {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        .lecture-unavailable {
+            opacity: 0.5;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .lecture-unavailable:hover {
+            transform: none !important;
+            border-color: #e0e0e0 !important;
+            box-shadow: 0 2px 5px var(--shadow) !important;
+        }
+
+        [data-theme="dark"] .lecture-unavailable:hover {
+            border-color: #444 !important;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            text-align: center;
+            color: white !important;
+            padding: 20px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            color: white !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1.2em;
+            }
+
+            .lectures-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle - Top Right Bubble (from presentation.css) -->
+    <div class="top-controls">
+        <div class="theme-toggle">
+            <span class="theme-toggle-label">Light</span>
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-checkbox">
+                <span class="theme-slider"></span>
+            </label>
+            <span class="theme-toggle-label">Dark</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- ===================================
+             HEADER - CUSTOMIZE FOR YOUR COURSE
+             =================================== -->
+        <header>
+            <h1>Course Title Here</h1>
+            <p class="subtitle">COURSE 0000 - Level (Undergraduate/Graduate)</p>
+            <p class="meta-info">Semester Year | Instructor: Your Name</p>
+
+            <!-- Optional: Navigation Buttons -->
+            <!-- <div class="nav-buttons">
+                <a href="./pages/attendance.html" class="nav-button">📋 Attendance</a>
+                <a href="https://your-resource-link.com" target="_blank" class="nav-button">📚 Resources</a>
+            </div> -->
+        </header>
+
+        <!-- ===================================
+             COURSE OVERVIEW SECTION
+             =================================== -->
+        <div class="info-section">
+            <h2>📚 Course Overview</h2>
+            <p>Welcome to [Course Name]! This course covers [brief description of course content].</p>
+            <p>[Add additional course description paragraphs here]</p>
+
+            <h3>Important Information:</h3>
+            <ul>
+                <li>📧 Email: your.email@institution.edu</li>
+                <li>🏢 Office: Building Name - Room Number</li>
+                <li>⏰ Office Hours: Days and Times</li>
+                <li>📖 Textbook: [Optional textbook information]</li>
+            </ul>
+        </div>
+
+        <!-- ===================================
+             QUICK LINKS (OPTIONAL)
+             Delete this section if not needed
+             =================================== -->
+        <div class="quick-links">
+            <a href="https://example.com" target="_blank" class="quick-link-card">
+                <div class="quick-link-icon">📖</div>
+                <div class="quick-link-title">Resource 1</div>
+                <div class="quick-link-description">Description of resource</div>
+            </a>
+
+            <a href="./pages/notes/notesTemplate.html" class="quick-link-card">
+                <div class="quick-link-icon">📝</div>
+                <div class="quick-link-title">Course Notes</div>
+                <div class="quick-link-description">Printable lecture notes</div>
+            </a>
+
+            <a href="https://example.com" target="_blank" class="quick-link-card">
+                <div class="quick-link-icon">🔗</div>
+                <div class="quick-link-title">External Link</div>
+                <div class="quick-link-description">Helpful external resource</div>
+            </a>
+
+            <a href="https://example.com" target="_blank" class="quick-link-card">
+                <div class="quick-link-icon">💻</div>
+                <div class="quick-link-title">Another Resource</div>
+                <div class="quick-link-description">More helpful links</div>
+            </a>
+        </div>
+
+        <!-- ===================================
+             LECTURES SECTION
+             Configure lectures in JavaScript below
+             =================================== -->
+        <div class="lectures-section">
+            <h2>📅 Course Schedule & Lectures</h2>
+
+            <div class="lectures-grid" id="lectures-grid">
+                <!-- Lectures will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- ===================================
+             FOOTER
+             =================================== -->
+        <footer>
+            <p>© 2025 Your Name | Your Institution</p>
+        </footer>
+    </div>
+
+    <script>
+    /* ===================================
+       LECTURES DATA
+       Customize this array for your course
+       =================================== */
+    const lectures = [
+        {
+            number: 1,
+            title: "Course Introduction",
+            date: "2025-01-15",
+            link: "./pages/lectures/1Introduction.html"
+        },
+        {
+            number: 2,
+            title: "Topic 1",
+            date: "2025-01-17",
+            link: "./pages/lectures/2Topic1.html"
+        },
+        {
+            number: 3,
+            title: "Topic 2",
+            date: "2025-01-22",
+            link: "./pages/lectures/3Topic2.html"
+        },
+        // Add more lectures here following the same format
+        // Optional: Set available: false to manually lock a lecture
+        // { number: 4, title: "Coming Soon", date: "2025-01-24", link: "#", available: false }
+    ];
+
+    /**
+     * Render lectures with availability logic
+     * - Lectures are locked until the day before their scheduled date
+     * - Lectures can be explicitly marked as unavailable with available: false
+     * - Visual indicators show completed (green), current week (gold), and locked (grayed out)
+     */
+    function renderLectures() {
+        const grid = document.getElementById('lectures-grid');
+        if (!grid) return;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset to start of day for accurate comparison
+
+        lectures.forEach(lecture => {
+            const lectureDate = new Date(lecture.date);
+            lectureDate.setHours(0, 0, 0, 0);
+
+            // Calculate days until lecture
+            const daysUntilLecture = Math.floor((lectureDate - today) / (1000 * 60 * 60 * 24));
+
+            // Lecture is available if:
+            // 1. It's not explicitly marked as unavailable (available: false)
+            // AND
+            // 2. It's either today, in the past, or tomorrow (day before)
+            const isLocked = lecture.available === false || daysUntilLecture > 1;
+
+            const isCompleted = lectureDate < today;
+            const isCurrent = daysUntilLecture >= 0 && daysUntilLecture <= 7;
+
+            const card = document.createElement('a');
+            card.className = 'lecture-card';
+
+            if (isCompleted && !isLocked) card.classList.add('completed');
+            if (isCurrent && !isLocked) card.classList.add('current');
+
+            if (isLocked) {
+                card.href = '#';
+                card.classList.add('lecture-unavailable');
+                card.onclick = (e) => e.preventDefault();
+            } else {
+                card.href = lecture.link;
+            }
+
+            // Format the status message
+            let statusMessage = '';
+            if (lecture.available === false) {
+                statusMessage = '<div style="color: var(--accent-color); font-size: 0.9em; margin-top: 5px;">Coming Soon</div>';
+            } else if (daysUntilLecture > 1) {
+                statusMessage = `<div style="color: var(--text-secondary); font-size: 0.9em; margin-top: 5px;">Available in ${daysUntilLecture} days</div>`;
+            } else if (daysUntilLecture === 1) {
+                statusMessage = '<div style="color: var(--secondary-color); font-size: 0.9em; margin-top: 5px;">Available tomorrow</div>';
+            }
+
+            card.innerHTML = `
+                <span class="lecture-number">Lecture ${lecture.number}</span>
+                <div class="lecture-title">${lecture.title}</div>
+                <div class="lecture-date">${lectureDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                })}</div>
+                ${statusMessage}
+            `;
+
+            grid.appendChild(card);
+        });
+    }
+
+    /**
+     * Initialize theme toggle and render lectures
+     */
+    window.addEventListener('DOMContentLoaded', () => {
+        // Render lectures
+        renderLectures();
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-checkbox');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    });
+    </script>
+</body>
+</html>

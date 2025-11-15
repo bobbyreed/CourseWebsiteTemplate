@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Title - Course Number</title>
+
+    <!-- Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="../../styles/theme-variables.css">
+    <link rel="stylesheet" href="../../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="../../images/favicon.png">
+
+    <!-- Lecture-Specific Styles (Optional) -->
+    <style>
+        /* Add any lecture-specific custom styles here if needed */
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+
+    <div class="presentation-container">
+        <!-- Optional timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Lecture Title
+                 <button class="home"><a href="../../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- ===================================
+             SLIDE 1: TITLE SLIDE
+             =================================== -->
+        <div class="slide active">
+            <h1>Lecture Main Title</h1>
+            <h2>Subtitle or Topic <span class="emoji">📚</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">Course Number - Course Name</p>
+            <p style="font-size: 1.3em;">Week X, Lecture Y</p>
+            <p style="margin-top: auto; font-style: italic;">Optional inspiring quote or tagline</p>
+        </div>
+
+        <!-- ===================================
+             SLIDE 2: LEARNING OBJECTIVES
+             =================================== -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 First learning objective</li>
+                <li>🎯 Second learning objective</li>
+                <li>🎯 Third learning objective</li>
+                <li>🎯 Fourth learning objective</li>
+            </ul>
+        </div>
+
+        <!-- ===================================
+             SLIDE 3: CONTENT EXAMPLE
+             Shows basic text, code, and tip box
+             =================================== -->
+        <div class="slide">
+            <h1>Content Title</h1>
+            <p>Regular paragraph text explaining the concept.</p>
+
+            <h3>Subheading</h3>
+            <p>More detailed explanation with examples.</p>
+
+            <!-- Code Example (Optional) -->
+            <div class="code-example">
+                <span class="tag">&lt;example&gt;</span>
+                <span class="content">Your code here</span>
+                <span class="tag">&lt;/example&gt;</span>
+            </div>
+
+            <!-- Tip Box (Optional) -->
+            <div class="tip-box">
+                <strong>💡 Pro Tip:</strong> Helpful information or best practice.
+            </div>
+        </div>
+
+        <!-- ===================================
+             SLIDE 4: ACTIVITY SLIDE
+             Interactive exercise with timer
+             =================================== -->
+        <div class="slide">
+            <h1>Practice Activity <span class="emoji">💻</span></h1>
+            <div class="activity-box">
+                <h3>Time to Practice!</h3>
+                <p>Complete the following task:</p>
+                <ol>
+                    <li>First instruction</li>
+                    <li>Second instruction</li>
+                    <li>Third instruction</li>
+                </ol>
+            </div>
+            <!-- Timer button - change data-timer value for different durations -->
+            <button data-timer="10">Start 10-Minute Timer</button>
+            <button data-timer="5">Start 5-Minute Timer</button>
+        </div>
+
+        <!-- ===================================
+             SLIDE 5: COMPARISON SLIDE
+             Side-by-side good vs bad examples
+             =================================== -->
+        <div class="slide">
+            <h1>Comparing Approaches</h1>
+            <div class="comparison-table">
+                <div class="comparison-card good">
+                    <h3>✅ Good Practice</h3>
+                    <div class="code-example">
+                        <span class="good">// Good example code</span>
+                    </div>
+                    <p>Explanation of why this is good.</p>
+                </div>
+                <div class="comparison-card bad">
+                    <h3>❌ Bad Practice</h3>
+                    <div class="code-example">
+                        <span class="bad">// Bad example code</span>
+                    </div>
+                    <p>Explanation of why this is bad.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================
+             SLIDE 6: TWO-COLUMN LAYOUT
+             =================================== -->
+        <div class="slide">
+            <h1>Two-Column Content</h1>
+            <div class="two-column">
+                <div>
+                    <h3>Left Column</h3>
+                    <ul>
+                        <li>Point one</li>
+                        <li>Point two</li>
+                        <li>Point three</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Right Column</h3>
+                    <ul>
+                        <li>Point one</li>
+                        <li>Point two</li>
+                        <li>Point three</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================
+             SLIDE 7: VISUAL EXAMPLE
+             For demonstrations and diagrams
+             =================================== -->
+        <div class="slide">
+            <h1>Visual Example</h1>
+            <div class="visual-example">
+                <h3>Demonstration Area</h3>
+                <p>Use this area to show visual examples, diagrams, or interactive demos.</p>
+                <!-- You can embed images, iframes, or custom HTML here -->
+            </div>
+            <div class="warning-box">
+                <strong>⚠️ Important Note:</strong> Key warning or important information.
+            </div>
+        </div>
+
+        <!-- ===================================
+             FINAL SLIDE: SUMMARY
+             =================================== -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li>✅ First accomplishment from this lecture</li>
+                <li>✅ Second accomplishment from this lecture</li>
+                <li>✅ Third accomplishment from this lecture</li>
+            </ul>
+            <div class="demo-box" style="margin-top: 40px;">
+                <p><strong>📅 Next Class:</strong> Preview of the next topic</p>
+                <p><strong>📝 Homework:</strong> What students should practice (if applicable)</p>
+            </div>
+        </div>
+
+        <!-- ===================================
+             NAVIGATION CONTROLS
+             Automatically managed by JavaScript
+             =================================== -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript (Optional) -->
+    <script>
+        /**
+         * OPTIONAL: Add lecture-specific JavaScript here
+         */
+
+        // Example: Listen for slide changes
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+            // Add custom behavior based on which slide is active
+        });
+
+        // Example: Programmatically navigate to a specific slide
+        // window.presentation.goToSlide(3); // Go to slide 4 (0-indexed)
+
+        // Example: Add custom keyboard shortcuts
+        // document.addEventListener('keydown', (e) => {
+        //     if (e.key === 'r') {
+        //         // Your custom action
+        //     }
+        // });
+    </script>
+</body>
+</html>
