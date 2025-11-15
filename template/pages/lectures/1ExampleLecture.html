@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Lecture - Course Template Demo</title>
+
+    <!-- Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="../../styles/theme-variables.css">
+    <link rel="stylesheet" href="../../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="../../images/favicon.png">
+</head>
+<body>
+    <!-- Theme toggle and controls added automatically by JavaScript -->
+
+    <div class="presentation-container">
+        <!-- Timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Example Lecture
+                 <button class="home"><a href="../../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- SLIDE 1: Title -->
+        <div class="slide active">
+            <h1>Welcome to the Course Website Template!</h1>
+            <h2>An Example Lecture <span class="emoji">🎓</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">This is a sample lecture to demonstrate features</p>
+            <p style="font-size: 1.3em;">Use arrow keys or navigation buttons to advance</p>
+            <p style="margin-top: auto; font-style: italic;">"Teaching is the greatest act of optimism" - Colleen Wilcox</p>
+        </div>
+
+        <!-- SLIDE 2: Keyboard Shortcuts -->
+        <div class="slide">
+            <h1>Keyboard Shortcuts <span class="emoji">⌨️</span></h1>
+            <h2>Navigate Like a Pro</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>Navigation</h3>
+                    <ul style="font-size: 1.2em; line-height: 2;">
+                        <li><strong>←</strong> Previous slide</li>
+                        <li><strong>→</strong> Next slide</li>
+                        <li><strong>Space</strong> Next slide</li>
+                        <li><strong>Home</strong> First slide</li>
+                        <li><strong>End</strong> Last slide</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Features</h3>
+                    <ul style="font-size: 1.2em; line-height: 2;">
+                        <li><strong>F</strong> Fullscreen mode</li>
+                        <li><strong>T</strong> Toggle theme</li>
+                        <li><strong>Esc</strong> Exit fullscreen</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 30px;">
+                <strong>💡 Try it now:</strong> Press <kbd>F</kbd> to enter fullscreen, then <kbd>T</kbd> to toggle between light and dark themes!
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Content Components -->
+        <div class="slide">
+            <h1>Content Components</h1>
+            <p>The template includes various pre-styled components:</p>
+
+            <h3>Information Boxes</h3>
+            <div class="tip-box">
+                <strong>💡 Tip Box:</strong> Great for helpful hints and best practices
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Warning Box:</strong> Use for important cautions or common mistakes
+            </div>
+
+            <div class="visual-example" style="margin-top: 20px;">
+                <strong>Visual Example Box:</strong> Perfect for demonstrations and examples
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Code Examples -->
+        <div class="slide">
+            <h1>Code Examples</h1>
+            <p>Display code with syntax highlighting:</p>
+
+            <div class="code-example">
+                <span class="comment">// Example JavaScript function</span><br>
+                <span class="tag">function</span> <span class="attribute">greet</span>(<span class="value">name</span>) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">console</span>.<span class="attribute">log</span>(<span class="value">"Hello, "</span> + name);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">return</span> <span class="value">true</span>;<br>
+                }
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Pro Tip:</strong> Use different size variants:
+                <code>.code-example.code-lg</code>,
+                <code>.code-md</code>, or
+                <code>.code-sm</code>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Comparison Example -->
+        <div class="slide">
+            <h1>Comparing Approaches</h1>
+            <p>Show good vs. bad practices side-by-side:</p>
+
+            <div class="comparison-table">
+                <div class="comparison-card good">
+                    <h3>✅ Good Practice</h3>
+                    <div class="code-example code-sm">
+                        <span class="good">const descriptiveName = "value";</span><br>
+                        <span class="good">// Clear and self-documenting</span>
+                    </div>
+                    <p>Uses meaningful variable names that explain purpose</p>
+                </div>
+                <div class="comparison-card bad">
+                    <h3>❌ Bad Practice</h3>
+                    <div class="code-example code-sm">
+                        <span class="bad">const x = "value";</span><br>
+                        <span class="bad">// What is x?</span>
+                    </div>
+                    <p>Unclear variable name requires additional context</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Interactive Activity -->
+        <div class="slide">
+            <h1>Interactive Activities <span class="emoji">💻</span></h1>
+
+            <div class="activity-box">
+                <h3>Try It Yourself!</h3>
+                <p>Practice what you've learned:</p>
+                <ol style="font-size: 1.2em;">
+                    <li>Press <kbd>F</kbd> to enter fullscreen mode</li>
+                    <li>Press <kbd>T</kbd> to toggle to dark mode</li>
+                    <li>Use <kbd>←</kbd> and <kbd>→</kbd> to navigate</li>
+                    <li>Click a timer button below</li>
+                </ol>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center;">
+                <button data-timer="1" style="margin: 10px;">1-Minute Demo Timer</button>
+                <button data-timer="5" style="margin: 10px;">5-Minute Timer</button>
+                <button data-timer="10" style="margin: 10px;">10-Minute Timer</button>
+            </div>
+
+            <div class="tip-box" style="margin-top: 30px;">
+                <strong>💡 How it works:</strong> Timers display in the top-right corner and play an audio alert when finished!
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Two-Column Layout -->
+        <div class="slide">
+            <h1>Flexible Layouts</h1>
+
+            <div class="two-column">
+                <div>
+                    <h3>Column 1: Theory</h3>
+                    <p>Use two-column layouts to present complementary information side-by-side.</p>
+                    <ul>
+                        <li>Concept explanations</li>
+                        <li>Definitions</li>
+                        <li>Theoretical background</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Column 2: Practice</h3>
+                    <p>Pair concepts with practical examples for better understanding.</p>
+                    <div class="code-example code-sm">
+// Practical example
+const example = true;
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 30px;">
+                <strong>⚠️ Note:</strong> On mobile devices, columns stack vertically for better readability.
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Lists and Formatting -->
+        <div class="slide">
+            <h1>Lists & Formatting</h1>
+
+            <h3>Ordered Lists</h3>
+            <ol style="font-size: 1.2em;">
+                <li>First step in the process</li>
+                <li>Second step builds on the first</li>
+                <li>Final step completes the task</li>
+            </ol>
+
+            <h3>Unordered Lists with Emojis</h3>
+            <ul style="font-size: 1.2em;">
+                <li>🎯 Key learning objective</li>
+                <li>💡 Important concept</li>
+                <li>✅ Skill to master</li>
+            </ul>
+
+            <p style="margin-top: 30px;">Use <code>style="font-size: 1.2em; line-height: 2;"</code> for better readability in presentations.</p>
+        </div>
+
+        <!-- SLIDE 9: Customization Tips -->
+        <div class="slide">
+            <h1>Customization Guide</h1>
+
+            <h3>Quick Customizations:</h3>
+
+            <div class="card-accent">
+                <strong>1. Colors</strong> - Edit <code>styles/theme-variables.css</code>
+                <ul>
+                    <li><code>--primary-color</code> - Main brand color</li>
+                    <li><code>--secondary-color</code> - Accent color</li>
+                    <li><code>--accent-color</code> - Highlight color</li>
+                </ul>
+            </div>
+
+            <div class="card-accent">
+                <strong>2. Course Info</strong> - Edit <code>index.html</code>
+                <ul>
+                    <li>Course title and number</li>
+                    <li>Instructor information</li>
+                    <li>Lecture schedule</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Tip:</strong> Run <code>bash initialize-course.sh</code> to automate these updates!
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Resources -->
+        <div class="slide">
+            <h1>Documentation & Resources</h1>
+
+            <h3>Available Documentation:</h3>
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li>📖 <strong>README.md</strong> - Quick start guide</li>
+                <li>🎨 <strong>CUSTOMIZATION_GUIDE.md</strong> - Detailed customization</li>
+                <li>✍️ <strong>LECTURE_CREATION_GUIDE.md</strong> - Best practices</li>
+                <li>🏗️ <strong>PROJECT_OVERVIEW.md</strong> - Architecture details</li>
+                <li>✅ <strong>SETUP_CHECKLIST.md</strong> - Step-by-step setup</li>
+                <li>🧪 <strong>TEST_REPORT.md</strong> - Validation results</li>
+            </ul>
+
+            <div class="warning-box" style="margin-top: 30px;">
+                <strong>Need Help?</strong> Check the documentation or create an issue on GitHub!
+            </div>
+        </div>
+
+        <!-- SLIDE 11: Key Takeaways -->
+        <div class="slide">
+            <h1>Key Takeaways <span class="emoji">🎓</span></h1>
+
+            <h2>You've Learned About:</h2>
+            <ul style="font-size: 1.4em; line-height: 2.2;">
+                <li>✅ Keyboard navigation shortcuts</li>
+                <li>✅ Theme toggling (light/dark mode)</li>
+                <li>✅ Available content components</li>
+                <li>✅ Interactive timers for activities</li>
+                <li>✅ Flexible layout options</li>
+                <li>✅ Customization possibilities</li>
+            </ul>
+
+            <div class="demo-box" style="margin-top: 40px;">
+                <p><strong>📚 Next Steps:</strong></p>
+                <p>Read SETUP_CHECKLIST.md and start customizing for your course!</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: Final Slide -->
+        <div class="slide">
+            <h1>Ready to Build Your Course Site!</h1>
+
+            <div style="text-align: center; margin-top: 60px;">
+                <p style="font-size: 2em; margin-bottom: 30px;">🚀</p>
+                <p style="font-size: 1.6em; margin-bottom: 20px;">
+                    <strong>Start by running:</strong>
+                </p>
+                <div class="code-example code-lg" style="margin: 30px auto; max-width: 600px;">
+                    bash initialize-course.sh
+                </div>
+                <p style="font-size: 1.3em; margin-top: 40px;">
+                    Happy Teaching! 🎓
+                </p>
+            </div>
+
+            <div style="position: absolute; bottom: 100px; left: 0; right: 0; text-align: center;">
+                <p style="font-style: italic; color: var(--text-secondary);">
+                    Press <kbd>Home</kbd> to return to the beginning
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">12</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Listen for slide changes
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Viewing slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+        });
+    </script>
+</body>
+</html>

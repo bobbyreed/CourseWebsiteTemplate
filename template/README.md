@@ -1,6 +1,28 @@
 # Course Website Template
 
-A domain-agnostic, professional course website template with interactive presentations, attendance tracking, and theme customization.
+[![GitHub Template](https://img.shields.io/badge/GitHub-Template-green?logo=github)](https://github.com/bobbyreed/CourseWebsiteTemplate)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Tested](https://img.shields.io/badge/Tests-71%2F71%20Passed-brightgreen)](TEST_REPORT.md)
+
+A domain-agnostic, professional course website template with interactive presentations, attendance tracking, and theme customization. **Battle-tested with 100+ students across 3 production courses.**
+
+## 🚀 Using This Template
+
+This is a GitHub template repository! To create your own course website:
+
+1. **Click "Use this template"** button at the top of this repository
+2. **Name your new repository** (e.g., `CSCI3403-WebProgramming`)
+3. **Clone your new repository** to your local machine
+4. **Run the setup wizard** (optional but recommended):
+   ```bash
+   bash initialize-course.sh
+   ```
+   This will prompt you for course details and automatically update the template.
+5. **Follow the [Setup Checklist](SETUP_CHECKLIST.md)** to complete your site
+
+**Prefer manual setup?** See the [Quick Start](#quick-start) section below.
+
+---
 
 ## Features
 
@@ -12,17 +34,37 @@ A domain-agnostic, professional course website template with interactive present
 
 ## Quick Start
 
-### Option 1: Static Website (No Attendance)
+### Automated Setup (Recommended)
 
-1. Clone or download this template
-2. Edit `index.html` with your course information
-3. Customize colors in `styles/theme-variables.css`
-4. Create lectures using `pages/lectures/lectureTemplate.html`
-5. Deploy to GitHub Pages, Netlify, or any static host
+```bash
+# After creating from template and cloning
+cd your-course-repo
+bash initialize-course.sh
+```
 
-### Option 2: Full Setup (With Attendance Tracking)
+The wizard will prompt you for:
+- Course title, number, and level
+- Instructor information
+- Institution colors
+- Whether you want attendance tracking
+- Deployment preferences
 
-1. Clone this template
+Then follow the [Setup Checklist](SETUP_CHECKLIST.md) for remaining tasks.
+
+### Manual Setup
+
+#### Option 1: Static Website (No Attendance)
+
+1. Create repository from this template on GitHub
+2. Clone your new repository
+3. Edit `index.html` with your course information
+4. Customize colors in `styles/theme-variables.css`
+5. Create lectures using `pages/lectures/lectureTemplate.html`
+6. Deploy to GitHub Pages, Netlify, or any static host
+
+#### Option 2: Full Setup (With Attendance Tracking)
+
+1. Create repository from this template
 2. Set up a [Neon PostgreSQL](https://neon.tech) database
 3. Deploy to Netlify
 4. Add `DATABASE_URL` environment variable in Netlify dashboard
@@ -120,16 +162,30 @@ CREATE TABLE attendance (
 
 ## Deployment
 
-### GitHub Pages
-1. Push to GitHub
-2. Enable Pages in repository settings
-3. Select branch and directory
+### GitHub Pages (Automated!)
 
-### Netlify
+This template includes GitHub Actions for automatic deployment:
+
+**Setup:**
+1. Push your repository to GitHub
+2. Go to Settings → Pages → Source: "GitHub Actions"
+3. Workflow automatically deploys on every push to `main`
+4. Access at: `https://[username].github.io/[repository-name]`
+
+**Limitations:** Serverless functions won't work (attendance tracking disabled)
+
+### Netlify (Full Features)
+
+**Setup:**
 1. Connect repository to Netlify
-2. Set build directory to `.`
-3. Add environment variables (if using attendance)
-4. Auto-deploys on push
+2. Build settings pre-configured in `netlify.toml`
+3. Add `DATABASE_URL` environment variable (if using attendance)
+4. Auto-deploys on every push
+
+**Benefits:** Serverless functions, custom domains, SSL, deploy previews
+
+### Other Hosts
+Works with Vercel, Cloudflare Pages, AWS S3, Azure Static Web Apps
 
 ## Documentation
 
